@@ -1,2 +1,2 @@
 # microsoft-azure-OAuth
-Eample app for microsoft azure OAuth setup
+Example app for microsoft azure OAuth setup
