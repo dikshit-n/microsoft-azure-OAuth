@@ -1,11 +1,13 @@
+import { useEffect } from "react";
 import { useOAuth } from "src/hooks";
 
 function App() {
-  const { authState, login, logout } = useOAuth();
+  const { authState, login, logout, initialize } = useOAuth();
 
   return (
     <div>
       <h1>OAuth Demo</h1>
+      <button onClick={() => initialize()}>get Token</button>
       {authState.isAuthenticated ? (
         <>
           <h4>Successfully logged in</h4>

@@ -8,6 +8,8 @@ const initialAuthState: any = {
   user: {},
 };
 
+// video reference -- https://www.youtube.com/watch?v=4pH5spE2Yss
+
 export const useOAuth = () => {
   const [authState, setAuthState] = useState(initialAuthState);
 
@@ -23,12 +25,27 @@ export const useOAuth = () => {
     },
   });
 
+  const initialize = async () => {
+    try {
+      const data = await publicClientApplication.acquireTokenSilent({
+        scopes: config.scopes,
+      });
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+      setAuthState({ ...initialAuthState, error: err });
+      window.alert("Failed to login");
+    }
+  };
+
   const login = async () => {
     try {
-      await publicClientApplication.loginPopup({
+      let data = await publicClientApplication.loginPopup({
         scopes: config.scopes,
         prompt: "select_account",
       });
+      await publicClientApplication.setActiveAccount(data.account);
+      console.log(data);
       setAuthState({ isAuthenticated: true });
     } catch (err) {
       console.log(err);
@@ -52,7 +69,13 @@ export const useOAuth = () => {
   };
   // const logout = async() => publicClientApplication.logoutRedirect()
 
-  const exportables = { publicClientApplication, authState, login, logout };
+  const exportables = {
+    publicClientApplication,
+    authState,
+    login,
+    logout,
+    initialize,
+  };
 
   return exportables;
 };
